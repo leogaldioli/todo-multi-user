@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Todo List</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="/theme/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- MetisMenu CSS -->
+    <link href="/theme/bower_components/metisMenu/dist/metisMenu.min.css" rel="stylesheet">
+
+    <!-- Timeline CSS -->
+    <link href="/theme/dist/css/timeline.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="/theme/dist/css/sb-admin-2.css" rel="stylesheet">
+
+    <!-- Morris Charts CSS -->
+    <link href="/theme/bower_components/morrisjs/morris.css" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <link href="/theme/bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <link href="/assets/css/style.css" rel="stylesheet" type="text/css">
+</head>
+
+<body ng-app="todo" ng-controller="Main">
+
+    <div id="wrapper">
+
+        <!-- Navigation -->
+        <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="index.html">Todo List</a>
+            </div>
+
+            <ul class="nav navbar-top-links navbar-right">                
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="fa fa-user fa-fw"></i>  <i class="fa fa-caret-down"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-user">
+                        <li><a href="javascript:void(0)" ng-click="logout()"><i class="fa fa-sign-out fa-fw"></i> Sair</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+
+            <div class="navbar-default sidebar" role="navigation">
+                <div class="sidebar-nav navbar-collapse">
+                    <ul class="nav" id="side-menu">
+                        <li>
+                            <a href="/"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
+                        </li>
+                        <!-- <li>
+                            <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> Charts<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="flot.html">Flot Charts</a>
+                                </li>
+                                <li>
+                                    <a href="/pages/morris.html">Morris.js Charts</a>
+                                </li>
+                            </ul> -->
+                            <!-- /.nav-second-level -->
+                        <!-- </li> -->
+                    </ul>
+                </div>
+                <!-- /.sidebar-collapse -->
+            </div>
+            <!-- /.navbar-static-side -->
+        </nav>
+
+        <div id="page-wrapper">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1 class="page-header">Dashboard</h1>
+                </div>
+                <!-- /.col-lg-12 -->
+            </div>
+            <!-- /.row -->
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <i class="fa fa-bar-chart-o fa-tasks"></i> Tarefas
+                        </div>
+                        <!-- /.panel-heading -->
+                        <div class="panel-body">
+                          <div class="panel-body">
+                            <div class="row">
+                              <form role="form" ng-submit="addTask()">                              
+                                <div class="col-lg-12">
+                                  <div class="input-group">
+                                    <input type="text" class="form-control" placeholder="Nova Tarefa" ng-model="task.name">
+                                    <span class="input-group-btn">
+                                      <button class="btn btn-info" type="button"><i class="fa fa-plus"></i></button>
+                                    </span>
+                                  </div><!-- /input-group -->
+                                </div><!-- /.col-lg-12 -->
+                              </form>
+                            </div><!-- /.row -->
+                            <div class="list-group">
+                              <!-- <a href="#" class="list-group-item">
+                                <button type="button" class="btn btn-info btn-circle"><i class="fa fa-square-o"></i></button>
+                                TAREFA 1
+                                <span class="pull-right text-muted small"><em>4 minutes ago</em>
+                                </span>
+                              </a>
+                              <a href="#" class="list-group-item">
+                                <button type="button" class="btn btn-info btn-circle "><i class="fa fa-square-o"></i></button>
+                                TAREFA 2
+                                <span class="pull-right text-muted small"><em>4 minutes ago</em>
+                                </span>
+                              </a>
+                              <a href="#" class="list-group-item">
+                                <button type="button" class="btn btn-success btn-circle"><i class="fa fa-check"></i></button>
+                                TAREFA 3
+                                <span class="pull-right text-muted small"><em>4 minutes ago</em>
+                                </span>
+                              </a> -->
+                              <a href="#" class="list-group-item" ng-repeat="t in tasks | orderBy:'done':true" ng-class="{'done-task': t.done}">
+                                <button type="button" class="btn btn-circle" ng-click="toggleTask(t)"
+                                ng-class="{'btn-info' : !t.done, 'btn-success': t.done}">
+                                    <i class="fa fa-square-o" ng-show="!t.done"></i>
+                                    <i class="fa fa-check" ng-show="t.done"></i>
+                                </button>
+                                {{t.name}}
+                                <span class="pull-right text-muted small"><em>{{t.updated_at | elapsed}}</em>
+                                </span>
+                              </a>
+                            </div>
+                              <!-- /.list-group -->
+                          </div>
+                        </div>
+                        <!-- /.panel-body -->
+                    </div>
+                    <!-- /.panel -->
+                </div>
+                <!-- /.col-lg-8 -->
+                <div class="col-lg-4">
+                    <!-- /.panel -->
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <i class="fa fa-bar-chart-o fa-fw"></i> Gráfico de tarefas
+                        </div>
+                        <div class="panel-body">
+                            <div id="morris-donut-chart"></div>
+                            <a href="#" class="btn btn-default btn-block">Ver detalhes</a>
+                        </div>
+                        <!-- /.panel-body -->
+                    </div>
+                    <!-- /.panel -->
+                </div>
+                <!-- /.col-lg-4 -->
+            </div>
+            <!-- /.row -->
+        </div>
+        <!-- /#page-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+
+    <!-- jQuery -->
+    <script src="/theme/bower_components/jquery/dist/jquery.min.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="/theme/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+
+    <!-- Metis Menu Plugin JavaScript -->
+    <script src="/theme/bower_components/metisMenu/dist/metisMenu.min.js"></script>
+
+    <!-- Morris Charts JavaScript -->
+    <script src="/theme/bower_components/raphael/raphael-min.js"></script>
+    <script src="/theme/bower_components/morrisjs/morris.min.js"></script>
+    
+
+    <!-- App JavaScript -->
+    <script src="/assets/lib/angular.min.js"></script>
+    <script src="/assets/lib/angular-loading/build/loading-bar.min.js"></script>
+    <script src="/assets/js/app.js"></script>
+    
+
+</body>
+
+</html>
